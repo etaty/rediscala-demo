@@ -1,0 +1,15 @@
+target/
+.idea*
+*.iml
+*.ipr
+.classpath*
+.project*
+.settings*
+.worksheet/
+
+.*.s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+*~
+.DS_Store
