@@ -1,5 +1,4 @@
 import redis.RedisClient
-import redis.Converter._
 import scala.concurrent.{Future, Await}
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
