@@ -10,20 +10,19 @@ object ExampleTransaction extends App {
   val redis = RedisClient()
 
   val redisTransaction = redis.transaction()
-  redisTransaction.exec()
-  redisTransaction.watch("a")
-  val set = redisTransaction.set("a", "abc")
-  val decr = redisTransaction.decr("a")
-  val get = redisTransaction.get("a")
+  redisTransaction.watch("key")
+  val set = redisTransaction.set("key", "abcValue")
+  val decr = redisTransaction.decr("key")
+  val get = redisTransaction.get("key")
   redisTransaction.exec()
   val r = for {
     s <- set
     g <- get
   } yield {
     assert(s)
-    println("ok : set(\"a\", \"abc\")")
-    assert(g == Some(ByteString("abc")))
-    println("ok : get(\"a\") == \"abc\"")
+    println("ok : set(\"key\", \"abcValue\")")
+    assert(g == Some(ByteString("abcValue")))
+    println("ok : get(\"key\") == \"abcValue\"")
   }
   decr.onFailure({
     case error => println(s"decr failed : $error")
