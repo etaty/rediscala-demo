@@ -8,7 +8,7 @@ object ExampleRediscalaBlocking extends App {
 
   val redis = RedisClient()
 
-  val redisBlocking1 = RedisBlockingClient()
+  val redisBlocking = RedisBlockingClient()
 
   val r = redis.del("workList").flatMap(_ => {
     consumer()
@@ -29,7 +29,7 @@ object ExampleRediscalaBlocking extends App {
     val waitWork = 3
     val sequenceFuture = for {i <- 0 to waitWork}
     yield {
-      redisBlocking1.blpop(Seq("workList", "otherKeyWithWork"), 5 seconds).map(result => {
+      redisBlocking.blpop(Seq("workList", "otherKeyWithWork"), 5 seconds).map(result => {
         result.map(_.map({
           case (key, work) => println(s"list $key has work : ${work.utf8String}")
         }))

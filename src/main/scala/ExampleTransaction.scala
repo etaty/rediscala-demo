@@ -28,5 +28,6 @@ object ExampleTransaction extends App {
     case error => println(s"decr failed : $error")
   })
   Await.result(r, 10 seconds)
+
   akkaSystem.shutdown()
 }
