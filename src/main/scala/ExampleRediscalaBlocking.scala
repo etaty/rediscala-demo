@@ -30,9 +30,9 @@ object ExampleRediscalaBlocking extends App {
     val sequenceFuture = for {i <- 0 to waitWork}
     yield {
       redisBlocking.blpop(Seq("workList", "otherKeyWithWork"), 5 seconds).map(result => {
-        result.map(_.map({
+        result.map({
           case (key, work) => println(s"list $key has work : ${work.utf8String}")
-        }))
+        })
       })
     }
 
