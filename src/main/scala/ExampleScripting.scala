@@ -25,14 +25,19 @@ object ExampleScripting extends App {
     _script <- script
   } yield {
     println(s"script ${redisScript.script} :")
-    val bulk = _scriptString.asInstanceOf[Bulk]
-    println(bulk.toString())
+    _scriptString match {
+      case b: Bulk => println(b.toString())
+      case _ => println("Bulk reply expected!")
+    }
 
     println(s"script ${redisScriptKeysArgs.script} :")
-    val multibulk = _script.asInstanceOf[MultiBulk]
-    multibulk.responses.map(_.map(reply => {
-      println(reply.toByteString.utf8String)
-    }))
+    _script match {
+      case mb: MultiBulk =>
+        mb.responses.map(_.map(reply => {
+          println(reply.toByteString.utf8String)
+        }))
+      case _ => println("MultiBulk reply expected!")
+    }
   }
   Await.result(r, 5 seconds)
 
