@@ -21,8 +21,8 @@ object ExamplePubSub extends App {
 
 }
 
-class SubscribeActor(channels: Seq[String] = Nil, patterns: Seq[String] = Nil) extends RedisSubscriberActor(channels, patterns) {
-  override val address: InetSocketAddress = new InetSocketAddress("localhost", 6379)
+class SubscribeActor(channels: Seq[String] = Nil, patterns: Seq[String] = Nil)
+  extends RedisSubscriberActor(new InetSocketAddress("localhost", 6379), channels, patterns) {
 
   def onMessage(message: Message) {
     println(s" message received: $message")
