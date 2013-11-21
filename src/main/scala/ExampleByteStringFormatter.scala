@@ -1,5 +1,6 @@
 import akka.util.ByteString
-import redis.{RedisClient, ByteStringFormatter}
+import redis.api.keys.Exists
+import redis.{ByteStringSerializer, RedisClient, ByteStringFormatter}
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -19,6 +20,18 @@ object DumbClass {
   }
 }
 
+
+case class PrefixedKey[K: ByteStringSerializer](prefix: String, key: K)
+
+object PrefixedKey {
+  implicit def serializer[K](implicit redisKey: ByteStringSerializer[K]) = new ByteStringSerializer[PrefixedKey[K]] {
+    def serialize(data: PrefixedKey[K]): ByteString = {
+      ByteString(data.prefix + redisKey.serialize(data.key))
+    }
+  }
+}
+
+
 object ExampleByteStringFormatter extends App {
   implicit val akkaSystem = akka.actor.ActorSystem()
 
@@ -37,6 +50,14 @@ object ExampleByteStringFormatter extends App {
   }
 
   Await.result(r, 5 seconds)
+
+
+  val prefixedKey = PrefixedKey("prefix", ByteString("1"))
+
+  val exists = redis.send(Exists(prefixedKey))
+
+  val bool = Await.result(exists, 5 seconds)
+  assert(!bool)
 
   akkaSystem.shutdown()
 }
