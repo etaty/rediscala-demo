@@ -22,7 +22,12 @@ object ExamplePubSub extends App {
 }
 
 class SubscribeActor(channels: Seq[String] = Nil, patterns: Seq[String] = Nil)
-  extends RedisSubscriberActor(new InetSocketAddress("localhost", 6379), channels, patterns) {
+  extends RedisSubscriberActor(
+    new InetSocketAddress("localhost", 6379),
+    channels,
+    patterns,
+    onConnectStatus = connected => { println(s"connected: $connected")}
+  ) {
 
   def onMessage(message: Message) {
     println(s" message received: $message")

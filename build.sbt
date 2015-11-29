@@ -1,9 +1,7 @@
 name:="rediscala-demo"
 
-scalaVersion:="2.10.5"
-
-resolvers += "rediscala" at "http://dl.bintray.com/etaty/maven"
+scalaVersion:="2.11.7"
 
 libraryDependencies ++= Seq(
-  "com.etaty.rediscala" %% "rediscala" % "1.4.2"
+  "com.github.etaty" %% "rediscala" % "1.5.0"
 )
