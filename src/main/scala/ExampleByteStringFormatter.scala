@@ -26,7 +26,7 @@ case class PrefixedKey[K: ByteStringSerializer](prefix: String, key: K)
 object PrefixedKey {
   implicit def serializer[K](implicit redisKey: ByteStringSerializer[K]) = new ByteStringSerializer[PrefixedKey[K]] {
     def serialize(data: PrefixedKey[K]): ByteString = {
-      ByteString(data.prefix + redisKey.serialize(data.key))
+      ByteString(data.prefix) ++ redisKey.serialize(data.key)
     }
   }
 }
